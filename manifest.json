@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Whatsapp Web Hide Chats Tools",
-  "description": "An extension to hide, blur and many more features to hide chats on Whatsapp Web",
+  "description": "An extension to hide, blur and many more features to chats on Whatsapp Web",
   "version": "1.0",
   "action": {
     "default_icon": {
