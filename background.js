@@ -14,8 +14,6 @@ const addClickListener = async (tab) => {
       const nextState =  currentState === 'OFF' ? 'ON' : 'OFF';
       currentState = nextState;
 
-      console.log('atualizando currentState', currentState);
-      
       // Save the next state
       chrome.storage.local.set({ currentState });
   
