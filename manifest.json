@@ -9,7 +9,9 @@
       "32": "images/icon/icon-32.png",
       "48": "images/icon/icon-48.png",
       "128": "images/icon/icon-128.png"
-    }
+    },
+    "default_title": "Hide Chats Tools",
+    "default_popup": "popup.html"
   },
   "background": {
     "service_worker": "background.js"
