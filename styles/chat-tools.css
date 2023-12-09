@@ -1,4 +1,4 @@
 /* change every element background to red while testing */
-* {
-  background: red;
+.lhggkp7q * {
+  filter: blur(2px) !important;
 }
