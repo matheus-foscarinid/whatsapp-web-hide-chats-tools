@@ -10,8 +10,8 @@ Have you ever wanted to hide a chat from your Whatsapp Web while you are at work
 
 ## TODOs 📝
 
-- [ ] Add an alpha version of the extension
-- [ ] Add a way to hide chats by clicking on the extension icon
+- [X] Add an alpha version of the extension
+- [X] Add a way to hide chats by clicking on the extension icon
 - [ ] Add a way to hide chats by clicking on the chat
 - [ ] Add a configuration page to the extension
 - [ ] Allow the user to blur the chat
