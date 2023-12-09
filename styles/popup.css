@@ -1,0 +1,56 @@
+/* import other css files from this same folder */
+@import url("switches.css");
+
+
+:root {
+  /* Backgrounds */
+  --main-bg-color: #111B21;
+  --secondary-bg-color: #1E2A30;
+  /* Borders */
+  --main-border-color: #374045;
+  /* Main colors */
+  --primary-color: #EA879D;
+}
+
+body {
+  position: relative;
+  width: 15rem;
+  height: 25rem;
+  align-items: stretch;
+  margin: 0 auto;
+  box-sizing: content-box;
+  display: flex;
+  flex-direction: column;
+  background: var(--main-bg-color);
+  color: #fff;
+  border: 2px solid var(--main-border-color);
+}
+
+header {
+  display: flex;
+  padding: 1rem;
+  flex-direction: row;
+  gap: .5rem;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--secondary-bg-color);
+}
+
+h1 {
+  font-size: 1.25rem;
+  font-weight: 300;
+  margin: 0;
+}
+
+.main-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
+
+.main-content span {
+  font-size: 1rem;
+  font-weight: 300;
+  margin: 0;
+}
