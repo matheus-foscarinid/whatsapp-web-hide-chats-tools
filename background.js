@@ -1,37 +1,48 @@
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.action.setBadgeText({
-    text: "OFF",
-  });
-});
+const WHATSAPP_WEB_URL = 'https://web.whatsapp.com/'
 
-const wppWebURL = 'https://web.whatsapp.com/'
+let currentState = 'OFF';
 
-chrome.action.onClicked.addListener(async (tab) => {
-  if (tab.url.startsWith(wppWebURL)) {
-    // Retrieve the action badge to check if the extension is 'ON' or 'OFF'
-    const prevState = await chrome.action.getBadgeText({ tabId: tab.id });
-    // Next state will always be the opposite
-    const nextState = prevState === 'ON' ? 'OFF' : 'ON'
+const getCurrentStateFromStorage = async () => {
+  const { currentState } = await chrome.storage.local.get(['currentState']);
+  return currentState;
+};
 
-    // Set the action badge to the next state
-    await chrome.action.setBadgeText({
-      tabId: tab.id,
-      text: nextState,
-    });
+const addClickListener = async (tab) => {
+  chrome.action.onClicked.addListener(async (tab) => {
+    if (tab.url.startsWith(WHATSAPP_WEB_URL)) {
+      // Next state will always be the opposite
+      const nextState =  currentState === 'OFF' ? 'ON' : 'OFF';
+      currentState = nextState;
 
-
-    if (nextState === 'ON') {
-      // Insert the CSS file when the user turns the extension on
-      await chrome.scripting.insertCSS({
-        files: ['focus-mode.css'],
-        target: { tabId: tab.id },
-      });
-    } else if (nextState === 'OFF') {
+      console.log('atualizando currentState', currentState);
+      
+      // Save the next state
+      chrome.storage.local.set({ currentState });
+  
+      if (nextState === 'ON') {
+        // Insert the CSS file when the user turns the extension on
+        await chrome.scripting.insertCSS({
+          files: ['styles/chat-tools.css'],
+          target: { tabId: tab.id },
+        });
+  
+        return
+      }
+  
       // Remove the CSS file when the user turns the extension off
       await chrome.scripting.removeCSS({
-        files: ['focus-mode.css'],
+        files: ['styles/chat-tools.css'],
         target: { tabId: tab.id },
       });
     }
-  }
-});
+  });
+};
+
+const startExtension = async () => {
+  // Get the current state from storage
+  currentState = await getCurrentStateFromStorage();
+  // Add a click listener to the extension icon
+  addClickListener();
+};
+
+startExtension();
