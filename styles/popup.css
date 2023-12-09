@@ -15,7 +15,6 @@
 body {
   position: relative;
   width: 15rem;
-  height: 25rem;
   align-items: stretch;
   margin: 0 auto;
   box-sizing: content-box;
@@ -53,4 +52,45 @@ h1 {
   font-size: 1rem;
   font-weight: 300;
   margin: 0;
+}
+
+.configs {
+  display: flex;
+  flex-direction: column;
+  padding: 0 .5rem;
+}
+
+.configs h2 {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+  margin-bottom: .5rem;
+}
+
+.configs .config {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .5rem 0;
+  border-top: 1px solid var(--main-border-color);
+}
+
+.copyright {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: .5rem;
+  font-size: .75rem;
+  font-weight: 300;
+  margin: 0;
+  border-top: 1px solid var(--main-border-color);
+}
+
+.copyright span {
+  font-weight: 500;
+}
+
+.copyright a {
+  color: var(--primary-color);
 }
