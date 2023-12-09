@@ -1,0 +1,4 @@
+/* change every element background to red while testing */
+* {
+  background: red;
+}
