@@ -1,4 +1,6 @@
 const WHATSAPP_WEB_URL = 'https://web.whatsapp.com/'
+const DEFAULT_LOGO = 'images/icon/icon-48.png';
+const DISABLED_LOGO = 'images/icon/icon-48-disabled.png';
 
 let mainToggle = null;
 let currentState = false;
@@ -23,6 +25,21 @@ const removeBlurScript = async (tab) => {
   });
 }
 
+const setlogoAccordingToExtensionState = (state) => {
+  const logoPath = state ? DEFAULT_LOGO : DISABLED_LOGO;
+  document.querySelector('header img').src = logoPath;
+}
+
+const setConfigsAccordingToExtensionState = (state) => {
+  const configsDiv = document.querySelector('.configs');
+
+  if (state) {
+    configsDiv.classList.add('active');
+  } else {
+    configsDiv.classList.remove('active');
+  }
+}
+
 const addClickListener = (tab) => {
   mainToggle.addEventListener('change', async () => {
     currentState = !currentState;
@@ -37,6 +54,8 @@ const addClickListener = (tab) => {
       : removeBlurScript;
 
     toggleMethod(tab);
+    setlogoAccordingToExtensionState(currentState);
+    setConfigsAccordingToExtensionState(currentState);
   });
 };
 
@@ -52,7 +71,8 @@ const startExtension = async () => {
     addBlurScript(tab);
   }
 
-  // Add a click listener to the extension icon
+  setlogoAccordingToExtensionState(currentState);
+  setConfigsAccordingToExtensionState(currentState);
   addClickListener();
 };
 
