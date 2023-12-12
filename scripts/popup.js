@@ -5,7 +5,6 @@ const DISABLED_LOGO = 'images/icon/icon-48-disabled.png';
 let mainToggle = null;
 let currentState = false;
 
-
 const getCurrentStateFromStorage = async () => {
   const result = await chrome.storage.local.get(['currentState']);
   return result.currentState;
@@ -13,17 +12,17 @@ const getCurrentStateFromStorage = async () => {
 
 const addBlurScript = async (tab) => {
   await chrome.scripting.insertCSS({
-    files: ['styles/chat-tools.css'],
+    files: ['styles/configs/chat-picture-blur.css'],
     target: { tabId: tab.id },
   });
 };
 
 const removeBlurScript = async (tab) => {
   await chrome.scripting.removeCSS({
-    files: ['styles/chat-tools.css'],
+    files: ['styles/configs/chat-picture-blur.css'],
     target: { tabId: tab.id },
   });
-}
+};
 
 const setlogoAccordingToExtensionState = (state) => {
   const logoPath = state ? DEFAULT_LOGO : DISABLED_LOGO;
@@ -60,7 +59,6 @@ const addClickListener = (tab) => {
 };
 
 const startExtension = async () => {
-  // Get the current state from storage
   currentState = await getCurrentStateFromStorage();
   mainToggle = document.querySelector('#main-toggle input');
   mainToggle.checked = currentState;
