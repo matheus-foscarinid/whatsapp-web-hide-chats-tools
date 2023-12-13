@@ -10,16 +10,16 @@ const getCurrentStateFromStorage = async () => {
   return result.currentState;
 };
 
-const addBlurScript = async (tab) => {
+const addScript = async (scriptName, tab) => {
   await chrome.scripting.insertCSS({
-    files: ['styles/configs/chat-picture-blur.css'],
+    files: [`styles/configs/${scriptName}.css`],
     target: { tabId: tab.id },
   });
 };
 
-const removeBlurScript = async (tab) => {
+const removeBlurScript = async (scriptName, tab) => {
   await chrome.scripting.removeCSS({
-    files: ['styles/configs/chat-picture-blur.css'],
+    files: [`styles/configs/${scriptName}.css`],
     target: { tabId: tab.id },
   });
 };
@@ -39,18 +39,29 @@ const setConfigsAccordingToExtensionState = (state) => {
   }
 }
 
+const addAllActiveConfigScripts = async (tab) => {
+  await addScript('chat-name-blur', tab);
+  await addScript('chat-picture-blur', tab);
+  await addScript('last-message-blur', tab);
+}
+
+const removeAllActiveConfigScripts = async (tab) => {
+  await removeBlurScript('chat-name-blur', tab);
+  await removeBlurScript('chat-picture-blur', tab);
+  await removeBlurScript('last-message-blur', tab);
+}
+
 const addClickListener = (tab) => {
   mainToggle.addEventListener('change', async () => {
     currentState = !currentState;
     chrome.storage.local.set({ currentState });
 
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-
     if (!tab.url.startsWith(WHATSAPP_WEB_URL)) return;
 
     const toggleMethod = currentState 
-      ? addBlurScript
-      : removeBlurScript;
+      ? addAllActiveConfigScripts
+      : removeAllActiveConfigScripts;
 
     toggleMethod(tab);
     setlogoAccordingToExtensionState(currentState);
@@ -66,7 +77,7 @@ const startExtension = async () => {
   if (currentState) {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (!tab.url.startsWith(WHATSAPP_WEB_URL)) return;
-    addBlurScript(tab);
+    addAllActiveConfigScripts(tab);
   }
 
   setlogoAccordingToExtensionState(currentState);
