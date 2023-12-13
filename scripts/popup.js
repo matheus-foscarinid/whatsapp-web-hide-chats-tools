@@ -1,4 +1,5 @@
 import storage from './storage.js';
+import { addAllActiveConfigScripts, removeAllActiveConfigScripts } from './script-manipulation.js';
 
 // Constants
 const WHATSAPP_WEB_URL = 'https://web.whatsapp.com/'
@@ -6,8 +7,8 @@ const DEFAULT_LOGO = 'images/icon/icon-48.png';
 const DISABLED_LOGO = 'images/icon/icon-48-disabled.png';
 
 let mainToggle = null;
-let currentState = false;
 let currentTab = null;
+let currentState = false;
 
 const setlogoAccordingToExtensionState = () => {
   const logoPath = currentState ? DEFAULT_LOGO : DISABLED_LOGO;
@@ -38,7 +39,7 @@ const addExtensionToggleListener = () => {
       ? addAllActiveConfigScripts
       : removeAllActiveConfigScripts;
 
-    toggleMethod(tab);
+    toggleMethod(currentTab);
     setlogoAccordingToExtensionState();
     setConfigsAccordingToExtensionState();
   });
