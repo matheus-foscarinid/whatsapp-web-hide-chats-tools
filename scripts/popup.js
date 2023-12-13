@@ -1,88 +1,61 @@
+import storage from './storage.js';
+
+// Constants
 const WHATSAPP_WEB_URL = 'https://web.whatsapp.com/'
 const DEFAULT_LOGO = 'images/icon/icon-48.png';
 const DISABLED_LOGO = 'images/icon/icon-48-disabled.png';
 
 let mainToggle = null;
 let currentState = false;
+let currentTab = null;
 
-const getCurrentStateFromStorage = async () => {
-  const result = await chrome.storage.local.get(['currentState']);
-  return result.currentState;
-};
-
-const addScript = async (scriptName, tab) => {
-  await chrome.scripting.insertCSS({
-    files: [`styles/configs/${scriptName}.css`],
-    target: { tabId: tab.id },
-  });
-};
-
-const removeBlurScript = async (scriptName, tab) => {
-  await chrome.scripting.removeCSS({
-    files: [`styles/configs/${scriptName}.css`],
-    target: { tabId: tab.id },
-  });
-};
-
-const setlogoAccordingToExtensionState = (state) => {
-  const logoPath = state ? DEFAULT_LOGO : DISABLED_LOGO;
+const setlogoAccordingToExtensionState = () => {
+  const logoPath = currentState ? DEFAULT_LOGO : DISABLED_LOGO;
   document.querySelector('header img').src = logoPath;
 }
 
-const setConfigsAccordingToExtensionState = (state) => {
+const setConfigsAccordingToExtensionState = () => {
   const configsDiv = document.querySelector('.configs');
-
-  if (state) {
-    configsDiv.classList.add('active');
-  } else {
-    configsDiv.classList.remove('active');
-  }
+  configsDiv.classList.toggle('active', currentState);
 }
 
-const addAllActiveConfigScripts = async (tab) => {
-  await addScript('chat-name-blur', tab);
-  await addScript('chat-picture-blur', tab);
-  await addScript('last-message-blur', tab);
+const isOnWhatsappWeb = () => currentTab.url.startsWith(WHATSAPP_WEB_URL);
+
+const getCurrentTab = async () => {
+  const currentTabFilters = { active: true, currentWindow: true };
+  [currentTab] = await chrome.tabs.query(currentTabFilters);
+  return currentTab;
 }
 
-const removeAllActiveConfigScripts = async (tab) => {
-  await removeBlurScript('chat-name-blur', tab);
-  await removeBlurScript('chat-picture-blur', tab);
-  await removeBlurScript('last-message-blur', tab);
-}
-
-const addClickListener = (tab) => {
+const addExtensionToggleListener = () => {
   mainToggle.addEventListener('change', async () => {
     currentState = !currentState;
-    chrome.storage.local.set({ currentState });
+    storage.set('currentState', currentState);
 
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    if (!tab.url.startsWith(WHATSAPP_WEB_URL)) return;
+    if (!isOnWhatsappWeb()) return;
 
     const toggleMethod = currentState 
       ? addAllActiveConfigScripts
       : removeAllActiveConfigScripts;
 
     toggleMethod(tab);
-    setlogoAccordingToExtensionState(currentState);
-    setConfigsAccordingToExtensionState(currentState);
+    setlogoAccordingToExtensionState();
+    setConfigsAccordingToExtensionState();
   });
 };
 
 const startExtension = async () => {
-  currentState = await getCurrentStateFromStorage();
+  currentTab = await getCurrentTab();
+  currentState = await storage.get('currentState');
+
   mainToggle = document.querySelector('#main-toggle input');
   mainToggle.checked = currentState;
 
-  if (currentState) {
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    if (!tab.url.startsWith(WHATSAPP_WEB_URL)) return;
-    addAllActiveConfigScripts(tab);
-  }
+  if (currentState && isOnWhatsappWeb()) addAllActiveConfigScripts(tab);
 
-  setlogoAccordingToExtensionState(currentState);
-  setConfigsAccordingToExtensionState(currentState);
-  addClickListener();
+  setlogoAccordingToExtensionState();
+  setConfigsAccordingToExtensionState();
+  addExtensionToggleListener();
 };
 
 startExtension();
