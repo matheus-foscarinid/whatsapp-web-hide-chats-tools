@@ -5,6 +5,10 @@ class Storage {
   }
 
   async get(key) {
+    if (Array.isArray(key)) {
+      return this.chromeStorage.get(key);
+    }
+
     const result = await this.chromeStorage.get([key]);
     return result[key];
   }
