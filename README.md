@@ -10,13 +10,12 @@ Have you ever wanted to hide a chat from your Whatsapp Web while you are at work
 
 ## TODOs 📝
 
-- [ ] Refac this TODO list!
 - [X] Add an alpha version of the extension
-- [X] Add a way to hide chats by clicking on the extension icon
-- [ ] Add a way to hide chats by clicking on the chat
-- [ ] Add a configuration page to the extension
-- [ ] Allow the user to blur the chat
-- [ ] Allow the user to configure the blur intensity, and chat opacity
-- [ ] Store the configuration in the browser
+- [X] Allow the user to blur the chat
+- [X] Update popup layout
+- [X] Change extension icon according to current state
+- [X] Add a configuration seccion to toggle the blur
+- [ ] Break chat blur into multiple options (picture, last message, contact name...)
+- [ ] Allow the user to configure the blur intensity, and maybe chat opacity
+- [ ] Persist the configuration on the browser
 - [ ] Post the extension on the Chrome Web Store
-
