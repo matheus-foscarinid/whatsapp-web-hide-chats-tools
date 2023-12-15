@@ -15,6 +15,7 @@ Have you ever wanted to hide a chat from your Whatsapp Web while you are at work
 - [X] Update popup layout
 - [X] Change extension icon according to current state
 - [X] Add a configuration seccion to toggle the blur
+- [ ] Keep extension state working after reloading the browser
 - [ ] Break chat blur into multiple options (picture, last message, contact name...)
 - [ ] Allow the user to configure the blur intensity, and maybe chat opacity
 - [ ] Persist the configuration on the browser
