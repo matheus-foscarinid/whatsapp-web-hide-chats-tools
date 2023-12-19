@@ -1,12 +1,17 @@
 import storage from './storage.js';
-import { addAllActiveConfigScripts, removeAllActiveConfigScripts } from './script-manipulation.js';
+import {
+  addScript,
+  removeScript,
+  addAllActiveConfigScripts, 
+  removeAllActiveConfigScripts 
+} from './script-manipulation.js';
 
 // Constants
 const WHATSAPP_WEB_URL = 'https://web.whatsapp.com/'
 const DEFAULT_LOGO = 'images/icon/icon-48.png';
 const DISABLED_LOGO = 'images/icon/icon-48-disabled.png';
+const CONFIG_KEYS = ['blurIntensity', 'pictureBlur', 'messageBlur', 'contactNameBlur', 'disableClicks'];
 
-let mainToggle = null;
 let currentTab = null;
 let currentState = false;
 
@@ -29,7 +34,8 @@ const getCurrentTab = async () => {
 }
 
 const addExtensionToggleListener = () => {
-  mainToggle.addEventListener('change', async () => {
+  const currentStateToggle = document.querySelector('#currentState input');
+  currentStateToggle.addEventListener('change', async () => {
     currentState = !currentState;
     storage.set('currentState', currentState);
 
@@ -47,10 +53,19 @@ const addExtensionToggleListener = () => {
 
 const startExtension = async () => {
   currentTab = await getCurrentTab();
-  currentState = await storage.get('currentState');
 
-  mainToggle = document.querySelector('#main-toggle input');
-  mainToggle.checked = currentState;
+  CONFIG_KEYS.forEach(async (key) => {
+    const value = await storage.get(key);
+    const relatedInput = document.querySelector(`#${key} input`);
+    
+    relatedInput.checked = value;
+    relatedInput.addEventListener('change', () => {
+      storage.set(key, relatedInput.checked);
+
+      const toggleMethod = relatedInput.checked ? addScript : removeScript;
+      toggleMethod(key, currentTab);
+    });
+  });
 
   if (currentState && isOnWhatsappWeb()) addAllActiveConfigScripts(tab);
 

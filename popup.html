@@ -17,7 +17,7 @@
     <div class="main-content">
       <span>Toggle extension</span>
 
-      <label id="main-toggle" class="switch">
+      <label id="currentState" class="switch">
         <input type="checkbox">
         <span class="slider"></span>
       </label>
@@ -27,18 +27,9 @@
       <h2>Configs</h2>
 
       <div class="config">
-        <span>Hide instead of bluring</span>
+        <span>Blur intensity</span>
 
-        <label id="startup-toggle" class="switch">
-          <input type="checkbox">
-          <span class="slider"></span>
-        </label>
-      </div>
-
-      <div class="config">
-        <span>Blur strength</span>
-
-        <label id="startup-toggle" class="switch">
+        <label id="blurIntensity" class="switch">
           <input type="checkbox">
           <span class="slider"></span>
         </label>
@@ -47,7 +38,7 @@
       <div class="config">
         <span>Blur profile picture</span>
 
-        <label id="startup-toggle" class="switch">
+        <label id="pictureBlur" class="switch">
           <input type="checkbox">
           <span class="slider"></span>
         </label>
@@ -56,7 +47,7 @@
       <div class="config">
         <span>Blur last message</span>
 
-        <label id="startup-toggle" class="switch">
+        <label id="messageBlur" class="switch">
           <input type="checkbox">
           <span class="slider"></span>
         </label>
@@ -65,7 +56,16 @@
       <div class="config">
         <span>Blur contact name</span>
 
-        <label id="startup-toggle" class="switch">
+        <label id="contactNameBlur" class="switch">
+          <input type="checkbox">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="config">
+        <span>Disable clicks on chats</span>
+
+        <label id="disableClicks" class="switch">
           <input type="checkbox">
           <span class="slider"></span>
         </label>
