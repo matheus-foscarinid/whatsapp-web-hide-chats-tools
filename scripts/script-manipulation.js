@@ -1,25 +1,37 @@
-const addScript = async (scriptName, tab) => {
+import storage from './storage.js';
+
+const KEYS = ['pictureBlur', 'messageBlur', 'contactNameBlur', 'disableClicks'];
+const KEY_SCRIPT_MAP = {
+  pictureBlur: 'chat-picture-blur',
+  messageBlur: 'last-message-blur',
+  contactNameBlur: 'chat-name-blur',
+};
+
+export const addScript = async (scriptName, tab) => {
   await chrome.scripting.insertCSS({
-    files: [`styles/configs/${scriptName}.css`],
+    files: [`styles/configs/${KEY_SCRIPT_MAP[scriptName]}.css`],
     target: { tabId: tab.id },
   });
 };
 
-const removeBlurScript = async (scriptName, tab) => {
+export const removeScript = async (scriptName, tab) => {
   await chrome.scripting.removeCSS({
-    files: [`styles/configs/${scriptName}.css`],
+    files: [`styles/configs/${KEY_SCRIPT_MAP[scriptName]}.css`],
     target: { tabId: tab.id },
   });
 };
 
-const addAllActiveConfigScripts = async (tab) => {
-  await addScript('chat-name-blur', tab);
-  await addScript('chat-picture-blur', tab);
-  await addScript('last-message-blur', tab);
+export const addAllActiveConfigScripts = async (tab) => {
+  const storedValues = await storage.get(KEYS);
+
+  KEYS.forEach(async (key) => {
+    const value = storedValues[key];
+    value && await addScript(KEY_SCRIPT_MAP[key], tab);
+  });
 }
 
-const removeAllActiveConfigScripts = async (tab) => {
-  await removeBlurScript('chat-name-blur', tab);
-  await removeBlurScript('chat-picture-blur', tab);
-  await removeBlurScript('last-message-blur', tab);
+export const removeAllActiveConfigScripts = async (tab) => {
+  KEYS.forEach(async (key) => {
+    await removeScript(KEY_SCRIPT_MAP[key], tab);
+  });
 }
