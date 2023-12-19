@@ -36,7 +36,8 @@ const setIconAccordingToExtensionState = async () => {
   chrome.action.setIcon({ path: iconPath });
 }
 
-chrome.runtime.onStartup.addListener(() => {
+chrome.runtime.onInstalled.addListener(() => {
   initializeExtensionState();
-  setIconAccordingToExtensionState();
 })
+
+setIconAccordingToExtensionState();
