@@ -26,12 +26,12 @@ export const addAllActiveConfigScripts = async (tab) => {
 
   KEYS.forEach(async (key) => {
     const value = storedValues[key];
-    value && await addScript(KEY_SCRIPT_MAP[key], tab);
+    value && await addScript(key, tab);
   });
 }
 
 export const removeAllActiveConfigScripts = async (tab) => {
   KEYS.forEach(async (key) => {
-    await removeScript(KEY_SCRIPT_MAP[key], tab);
+    await removeScript(key, tab);
   });
 }
